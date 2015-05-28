@@ -32,8 +32,10 @@ $DOG cluster format --copies=3
 $DOG node list
 
 # populate some data
-qemu-img create sheepdog:Alice 256G
+qemu-img create sheepdog:Alice 1G
 qemu-img convert -f qcow2 /vagrant/test.img sheepdog:Bob
+$DOG vdi snapshot Bob
+$DOG vdi clone -s 1 Bob Charlie
 $DOG vdi list
 
 # look at the storage
@@ -43,7 +45,6 @@ SCRIPT
   
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
-
   config.vm.provision "shell", inline: $script
 #  config.vm.provider "virtualbox" do |vb|
 #    #vb.gui = true
